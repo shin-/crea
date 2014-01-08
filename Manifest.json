@@ -1,0 +1,34 @@
+{
+  "info" : 
+  {
+    "name" : "crea",
+
+    "summary" : "CREA - Connected Roleplaying Enhancer Application",
+    "description" : "Connected Roleplaying Enhancer Application",
+    
+    "homepage" : "http://crea.joffrey.eu",
+
+    "license" : "Apache Public License",
+    "authors" : 
+    [
+      {
+        "name" : "Joffrey F",
+        "email" : "f.joffrey@gmail.com"
+      }
+    ],
+
+    "version" : "master",
+    "qooxdoo-versions": ["3.5"]
+  },
+  
+  "provides" : 
+  {
+    "namespace"   : "crea",
+    "encoding"    : "utf-8",
+    "class"       : "source/class",
+    "resource"    : "source/resource",
+    "translation" : "source/translation",
+    "type"        : "application"
+  }
+}
+
