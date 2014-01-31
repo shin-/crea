@@ -219,3 +219,5 @@ pip-log.txt
 ##############
 
 server/node_modules
+server/public/qx
+server/public/source
