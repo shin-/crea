@@ -3,6 +3,7 @@ qx.Class.define("crea.ui.PluginRegistryPanel", {
     construct: function() {
         this.base(arguments);
         this.emitter = new qx.event.Emitter();
+        this.io = new crea.utils.IoHelper();
         var layout = new qx.ui.layout.VBox();
         this.setLayout(layout);
         this._addListWidget();
@@ -14,12 +15,8 @@ qx.Class.define("crea.ui.PluginRegistryPanel", {
         _optionsBox: null,
         emitter: null,
 
-        _getPluginList: function() {
-            return [
-                {"name": "Image Box", "ns": "crea.plugins.common.imgbox"},
-                {"name": "D&D stats sheet", "ns": "crea.plugins.dd4.stats"},
-                {"name": "Dice Rolls", "ns": "crea.plugins.common.dice"}
-            ]
+        _getPluginList: function(cb, ctx) {
+            this.io.get('plugins', cb.bind(ctx));
         },
         _getPluginOptions: function(obj) {
             var namespace = obj.getNs();
@@ -30,18 +27,21 @@ qx.Class.define("crea.ui.PluginRegistryPanel", {
             return new qx.ui.basic.Label("No options box for " + namespace);
         },
         _addListWidget: function() {
-            var data = this._getPluginList();
-            var model = qx.data.marshal.Json.createModel(data);
-            var list = new qx.ui.list.List(model);
+            var list = new qx.ui.list.List();
             var delegate = {
                 sorter: function(a, b) {
                     return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
                 }
             };
+            this._list = list;
             list.setDelegate(delegate);
             list.setLabelPath("name");
+
+            this._getPluginList(function(data) {
+                var model = qx.data.marshal.Json.createModel(data);
+                this._list.setModel(model);
+            }, this)
             this.add(list);
-            this._list = list;
         },
         _addHooks: function() {
             this._list.getSelection().addListener("change", function(e) {

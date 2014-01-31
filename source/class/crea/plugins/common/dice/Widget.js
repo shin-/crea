@@ -15,8 +15,8 @@ qx.Class.define("crea.plugins.common.dice.Widget", {
         _logField: null,
         _buttonCtr: null,
 
-        _roll: function(d) {
-            return Math.floor(Math.random() * d) + 1;
+        _roll: function(d, cb) {
+            return this.io.post('roll', { 'sides': d }, cb);
         },
 
         _logRoll: function(res, d) {
@@ -38,8 +38,10 @@ qx.Class.define("crea.plugins.common.dice.Widget", {
             ]
             buttons.forEach(function(b) {
                 b[0].addListener("execute", function() {
-                    this._logRoll(this._roll(b[1]), b[1]);
-                }, this)
+                    this._roll(b[1], (function(result) {
+                        this._logRoll(result.result, b[1]);
+                    }).bind(this));
+                }, this);
                 this._buttonCtr.add(b[0]);
             }, this)
         }
