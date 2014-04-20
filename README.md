@@ -50,6 +50,7 @@ You need node.js v0.10.x and Python 2.x to follow these instructions.
         path/to/crea/server/public $ ln -s ../../source .
         path/to/crea/server/public $ ln -s ../../../qx .
 
+* Inside the `server/` directory, run `npm install`
 * Go to the `server/` directory and run `node app.js`
 * Point your browser to http://0.0.0.0:3000/source/index.html
 
