@@ -1,10 +1,9 @@
 qx.Class.define("crea.plugins.common.dice.Widget", {
     extend: crea.plugins.abstr.Widget,
-    construct: function() {
-        this.base(arguments);
+    construct: function(id) {
+        this.base(arguments, id);
         this.setLayout(new qx.ui.layout.VBox());
-        this._logField = new qx.ui.form.TextArea('');
-        this._logField.setReadOnly(true);
+        this._logField = new crea.ui.LogField();
         this.add(this._logField);
         this._buttonCtr = new qx.ui.container.Composite();
         this._buttonCtr.setLayout(new qx.ui.layout.HBox());
@@ -20,9 +19,7 @@ qx.Class.define("crea.plugins.common.dice.Widget", {
         },
 
         _logRoll: function(res, d) {
-            this._logField.setValue(this._logField.getValue() +
-                "[00:00.00] Rolled " + res + " out of " + d + "\n");
-            this._logField.getContentElement().scrollToY(200000);
+            this._logField.log("Rolled " + res + " out of " + d);
         },
 
         _fillButtonCtr: function() {

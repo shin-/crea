@@ -24,7 +24,7 @@ qx.Class.define("crea.Application", {
 
             this.io.get('state', (function(state) {
                 state.forEach(function(plugin) {
-                    this.enablePlugin([plugin.namespace, plugin.options]);
+                    this.enablePlugin(plugin.id, plugin.namespace, plugin.options);
                 }, this);
             }).bind(this));
 
@@ -32,16 +32,14 @@ qx.Class.define("crea.Application", {
                 "plugin_enable", this.registerPlugin, this
             );
         },
-        enablePlugin: function(data) {
-            var namespace = data[0],
-                opts = data[1];
+        enablePlugin: function(id, namespace, opts) {
             var classname = namespace + ".Widget";
             var cls = qx.Class.getByName(classname);
             if (cls == null) {
                 this.error("No class found: " + classname);
                 return;
             }
-            this.canvasPanel.add(new cls(opts));
+            this.canvasPanel.add(new cls(id, opts));
         },
         registerPlugin: function(data) {
             var namespace = data[0],
@@ -49,8 +47,9 @@ qx.Class.define("crea.Application", {
             this.io.post('register', {
                 'namespace': namespace,
                 'options': opts
-            });
-            this.enablePlugin(data);
+            }, (function(id) {
+                this.enablePlugin(id, namespace, opts);
+            }).bind(this));
         }
     }
 });

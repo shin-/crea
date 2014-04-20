@@ -1,4 +1,5 @@
 var fs = require('fs');
+var uuid = require('uuid');
 
 module.exports.start = function(app) {
     plugins = [];
@@ -37,17 +38,21 @@ module.exports.start = function(app) {
     app.post('/register', (function(req, res) {
         var namespace = req.body.namespace,
             options = req.body.options;
-        this.register(namespace, options);
+        var id = this.register(namespace, options);
+        res.send(id);
     }).bind(this));
 
     this._state = [];
 }
 
 module.exports.register = function(namespace, options) {
+    var id = uuid.v4();
     this._state.push({
+        id: id,
         namespace: namespace,
         options: options
     });
+    return id;
 }
 
 module.exports.state = function() {
