@@ -10,8 +10,7 @@ qx.Class.define("crea.plugins.abstr.OptionsBox", {
         addToPanel: function(options) {
             this.debug(this.classname);
             var namespace = this.classname.split('.').slice(0, -1).join('.');
-            var widgetCls = namespace + '.Widget';
-            this.emitter.emit("plugin_enable", [widgetCls, options]);
+            this.emitter.emit("plugin_enable", [namespace, options]);
         }
     }
 });

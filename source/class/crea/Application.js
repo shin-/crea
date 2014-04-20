@@ -4,6 +4,7 @@ qx.Class.define("crea.Application", {
         canvasPanel: null,
         main : function() {
             this.base(arguments);
+            this.io = new crea.utils.IoHelper();
 
             if (qx.core.Environment.get("qx.debug")) {
                 qx.log.appender.Native;
@@ -21,19 +22,35 @@ qx.Class.define("crea.Application", {
                 left: 5, top: 5, width: "84%", height: "100%"
             });
 
+            this.io.get('state', (function(state) {
+                state.forEach(function(plugin) {
+                    this.enablePlugin([plugin.namespace, plugin.options]);
+                }, this);
+            }).bind(this));
+
             pluginRegistryPanel.emitter.on(
-                "plugin_enable", this.enablePlugin, this
+                "plugin_enable", this.registerPlugin, this
             );
         },
         enablePlugin: function(data) {
-            var classname = data[0],
+            var namespace = data[0],
                 opts = data[1];
+            var classname = namespace + ".Widget";
             var cls = qx.Class.getByName(classname);
             if (cls == null) {
                 this.error("No class found: " + classname);
                 return;
             }
             this.canvasPanel.add(new cls(opts));
+        },
+        registerPlugin: function(data) {
+            var namespace = data[0],
+                opts = data[1];
+            this.io.post('register', {
+                'namespace': namespace,
+                'options': opts
+            });
+            this.enablePlugin(data);
         }
     }
 });
