@@ -13,7 +13,7 @@ RUN rm $CREA_ROOT/qx.zip
 
 ADD . /var/crea/crea
 
-RUN npm install $CREA_ROOT/crea/server
+RUN cd $CREA_ROOT/crea/server && npm install
 RUN python $CREA_ROOT/crea/generate.py source-all
 
 RUN mkdir -p $CREA_ROOT/crea/server/public ; \
